@@ -1,0 +1,3 @@
+# Svelte Store Enhanced
+
+A collection of enhanced Svelte stores...in the making...
