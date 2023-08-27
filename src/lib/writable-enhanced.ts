@@ -101,11 +101,7 @@ export function writableEnhanced<T>(
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
     get(key) {
-      if (key) {
-        return get(store)[key]
-      }
-
-      return get(store)
+      return key ? get(store)[key] : get(store)
     },
   }
 }
