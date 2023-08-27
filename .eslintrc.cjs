@@ -25,6 +25,9 @@ module.exports = {
       parserOptions: {
         parser: '@typescript-eslint/parser',
       },
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+      },
     },
   ],
 
