@@ -92,8 +92,8 @@ export function writableEnhanced<T>(
 
     // I'd rather get rid of this expect error, but since the real typing is
     // defined in the type declaration above via the overload method, and since
-    // VS Code derive the correct type when consuming this method, we can just
-    // live with this for now.
+    // VS Code, and TS, derive the correct type when consuming this method, we
+    // can just live with this for now.
     //
     // The fix is probably super-easy if you have a TS type system black belt.
     //
