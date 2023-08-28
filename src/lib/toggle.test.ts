@@ -26,6 +26,41 @@ it('off() should set the given property to false', () => {
   expect(s.one).toEqual(false)
   expect(s.two).toEqual(true)
   expect(s.three).toEqual(true)
+})
 
-  store.off('one')
+it('on() should set the given property to true', () => {
+  const store = toggle({ one: false, two: true, three: true })
+  store.on('one')
+
+  const s = get(store)
+  expect(s.one).toEqual(true)
+  expect(s.two).toEqual(true)
+  expect(s.three).toEqual(true)
+})
+
+it('toggle() should toggle the given property from true to false and vice-versa', () => {
+  const store = toggle({ one: false, two: true, three: true })
+  store.toggle('one')
+
+  let s = get(store)
+  expect(s.one).toEqual(true)
+  expect(s.two).toEqual(true)
+  expect(s.three).toEqual(true)
+
+  store.toggle('one')
+
+  s = get(store)
+  expect(s.one).toEqual(false)
+  expect(s.two).toEqual(true)
+  expect(s.three).toEqual(true)
+})
+
+it('swap() should toggle the given property and set all other to false', () => {
+  const store = toggle({ one: false, two: true, three: true })
+  store.swap('one')
+
+  const s = get(store)
+  expect(s.one).toEqual(true)
+  expect(s.two).toEqual(false)
+  expect(s.three).toEqual(false)
 })
