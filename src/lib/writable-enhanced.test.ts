@@ -1,6 +1,6 @@
-import { it, expect } from 'vitest'
-import { isWritableStore, writableEnhanced } from './writable-enhanced.js'
 import { writable } from 'svelte/store'
+import { expect, it } from 'vitest'
+import { isWritableStore, writableEnhanced } from './writable-enhanced.js'
 
 it('It should create a writable store given some data', () => {
   const store = writableEnhanced({ enhanced: true, name: 'store' })
