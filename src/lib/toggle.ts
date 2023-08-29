@@ -4,6 +4,15 @@ export type ToggleMap = { [key: string]: boolean }
 export type ToggleStore<T extends ToggleMap> = Writable<T> & {
   /** Toggle the state of `key` */
   toggle: (key: keyof T) => void
+  /**
+   * Set the state of all items
+   *
+   * @param state -
+   *  - `on` will set all items to `true`
+   *  - `off` will set all items to `false`
+   *  - `toggle` will toggle the state of all items
+   */
+  every: (state: 'on' | 'off' | 'toggle') => void
   /** Set the state of `key` to active, i.e. `true` */
   on: (key: keyof T) => void
   /** Set the state of `key` to inactive, i.e. `false` */
@@ -26,9 +35,26 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
 
     toggle(key): void {
       store.update((curr) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        curr[key] = !curr[key]
+        curr[key] = !curr[key] as never
+        return curr
+      })
+    },
+
+    every(state): void {
+      type Setter = (st: T, key: keyof T) => void
+
+      const fn: Setter =
+        state === 'toggle'
+          ? (st, k): void => (st[k] = !st[k] as never)
+          : state === 'on'
+          ? (st, k): void => (st[k] = true as never)
+          : (st, k): void => (st[k] = false as never)
+
+      store.update((curr) => {
+        for (const key of Object.keys(curr) as Array<keyof T>) {
+          fn(curr, key)
+        }
+
         return curr
       })
     },
@@ -36,9 +62,9 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
     swap(what): void {
       store.update((curr) => {
         for (const key of Object.keys(curr) as Array<keyof T>) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          key === what ? (curr[key] = !curr[key]) : (curr[key] = false)
+          key === what
+            ? (curr[key] = !curr[key] as never)
+            : (curr[key] = false as never)
         }
 
         return curr
@@ -47,18 +73,14 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
 
     on(key): void {
       store.update((curr) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        curr[key] = true
+        curr[key] = true as never
         return curr
       })
     },
 
     off(key): void {
       store.update((curr) => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        curr[key] = false
+        curr[key] = false as never
         return curr
       })
     },

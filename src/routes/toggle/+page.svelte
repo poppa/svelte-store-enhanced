@@ -3,6 +3,13 @@ import { toggle } from '$lib/toggle.js'
 
 const map = { one: true, two: false, three: false }
 const store = toggle(map)
+
+let allOpen: boolean
+let allClosed: boolean
+$: {
+  allOpen = Object.values($store).every((v) => v)
+  allClosed = Object.values($store).every((v) => !v)
+}
 </script>
 
 <svelte:head>
@@ -11,6 +18,15 @@ const store = toggle(map)
 
 <h1>Toggle Store</h1>
 
+<div class="actions">
+  <button on:click={() => store.every('toggle')}>Toggle All</button>
+  <button on:click={() => store.every('on')} disabled={allOpen}>Open All</button
+  >
+  <button on:click={() => store.every('off')} disabled={allClosed}
+    >Close All</button
+  >
+</div>
+<hr />
 <ul>
   <li class:show={$store.one}>
     <h2>
