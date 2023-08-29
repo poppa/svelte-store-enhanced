@@ -3,7 +3,7 @@ import { writable, type Writable } from 'svelte/store'
 export type ToggleMap = { [key: string]: boolean }
 export type ToggleStore<T extends ToggleMap> = Writable<T> & {
   /** Toggle the state of `key` */
-  toggle: (key: keyof T) => void
+  toggle: (key: keyof T) => ToggleStore<T>
   /**
    * Set the state of all items
    *
@@ -12,15 +12,15 @@ export type ToggleStore<T extends ToggleMap> = Writable<T> & {
    *  - `off` will set all items to `false`
    *  - `toggle` will toggle the state of all items
    */
-  every: (state: 'on' | 'off' | 'toggle') => void
+  every: (state: 'on' | 'off' | 'toggle') => ToggleStore<T>
   /** Set the state of `key` to active, i.e. `true` */
-  on: (key: keyof T) => void
+  on: (key: keyof T) => ToggleStore<T>
   /** Set the state of `key` to inactive, i.e. `false` */
-  off: (key: keyof T) => void
+  off: (key: keyof T) => ToggleStore<T>
   /** Toggle `key` and disable any other active key  */
-  swap: (key: keyof T) => void
+  swap: (key: keyof T) => ToggleStore<T>
   /** Reset the store to its initial values */
-  reset: VoidFunction
+  reset: () => ToggleStore<T>
 }
 
 /**
@@ -33,14 +33,16 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
   return {
     ...store,
 
-    toggle(key): void {
+    toggle(key): ToggleStore<T> {
       store.update((curr) => {
         curr[key] = !curr[key] as never
         return curr
       })
+
+      return this
     },
 
-    every(state): void {
+    every(state): ToggleStore<T> {
       type Setter = (st: T, key: keyof T) => void
 
       const fn: Setter =
@@ -57,9 +59,11 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
 
         return curr
       })
+
+      return this
     },
 
-    swap(what): void {
+    swap(what): ToggleStore<T> {
       store.update((curr) => {
         for (const key of Object.keys(curr) as Array<keyof T>) {
           key === what
@@ -69,24 +73,31 @@ export function toggle<T extends ToggleMap>(defaults: T): ToggleStore<T> {
 
         return curr
       })
+
+      return this
     },
 
-    on(key): void {
+    on(key): ToggleStore<T> {
       store.update((curr) => {
         curr[key] = true as never
         return curr
       })
+
+      return this
     },
 
-    off(key): void {
+    off(key): ToggleStore<T> {
       store.update((curr) => {
         curr[key] = false as never
         return curr
       })
+
+      return this
     },
 
-    reset(): void {
+    reset(): ToggleStore<T> {
       store.set({ ...initials })
+      return this
     },
   }
 }
