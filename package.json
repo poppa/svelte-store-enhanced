@@ -1,6 +1,7 @@
 {
   "name": "@poppanator/svelte-store-enhanced",
   "version": "0.0.1",
+  "private": false,
   "keywords": [
     "svelte",
     "store",
@@ -14,6 +15,10 @@
   },
   "bugs": {
     "url": "https://github.com/poppa/svelte-store-enhanced/issues"
+  },
+  "author": {
+    "name": "Pontus Östlund",
+    "url": "https://github.com/poppa"
   },
   "scripts": {
     "dev": "vite dev",
@@ -77,6 +82,5 @@
   },
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "type": "module",
-  "private": false
+  "type": "module"
 }
