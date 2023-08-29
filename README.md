@@ -42,7 +42,7 @@ The above `store.up(...)` is the equivalent of
 <script lang="ts">
 store.update((curr) => {
   curr.version = '4'
-  curr.cook = 'very'
+  curr.cool = 'very'
 
   return curr
 })
